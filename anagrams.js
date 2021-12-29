@@ -36,7 +36,6 @@
 
 
 const searchedWord = document.querySelector('#word-search');
-const button = document.querySelector('#button');
 
 
 const dictionary = async function() {
@@ -47,16 +46,18 @@ const dictionary = async function() {
 
 async function onInput(){
     const originalWord = searchedWord.value;
-    let anagrams = '';
+    const anagrams = [];
     const wordBank = await(dictionary());
-    wordBank.forEach((word) => {
-        if (originalWord.split('').sort().join('') === word.split('').sort().join('')) anagrams += `${word} `;
+    wordBank.forEach((newWord) => {
+        if ((originalWord.split('').sort().join('') === newWord.split('').sort().join('')) && originalWord != newWord) anagrams.push(newWord);
     })
-
-    //console.log(o)
-    document.getElementById('output').innerHTML = `List of anagrams: ${anagrams}`;
+    
+    console.log(anagrams);
+    if (anagrams.length === 0) document.getElementById('output').innerHTML = "No anagrams found :("
+    else document.getElementById('output').innerHTML = `Anagram(s) of ${originalWord}: ${anagrams.join(', ')}`
 }
 
 document.addEventListener("keyup", function(event){
+    const button = document.querySelector('#button');
     if (event.key === 'Enter') button.click();
 });
